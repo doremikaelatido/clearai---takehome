@@ -129,7 +129,7 @@ export default function GenerateEdiPage() {
                 })),
             };
 
-            const data = await request('api/edi/json-to-edi', {
+            const data = await request('edi/json-to-edi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -61,7 +61,7 @@ export default function DecodeEdiPage() {
                 throw new Error('No authentication token found');
             }
 
-            const data = await request('api/edi/edi-to-json', {
+            const data = await request('edi/edi-to-json', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
