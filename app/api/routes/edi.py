@@ -26,21 +26,21 @@ def json_to_edi(request: JsonToEdiRequest, db: Session = Depends(get_db)):
 
 @router.post("/edi-to-json", response_model=EdiParseResponse)
 def edi_to_json(request: EdiToJsonRequest):
-    valid, errors, warnings = ValidationService.validate_edi(request.edi)
-    if not valid:
+    validation = ValidationService.validate_edi(request.edi)
+    if validation.errors:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"errors": errors, "warnings": warnings},
+            detail={"errors": validation.errors, "warnings": validation.warnings},
         )
 
-    parsed_items = EdiParserService.parse_edi(request.edi)
+    parsed_items = EdiParserService.parse_edi(validation.cleaned_edi)
     if not parsed_items:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Unable to parse any valid cargo items from EDI payload",
         )
 
-    return EdiParseResponse(cargoItems=parsed_items, detail={"warnings": warnings})
+    return EdiParseResponse(cargoItems=parsed_items, detail={"warnings": validation.warnings})
 
 
 @router.post("/validate-edi", response_model=ValidationResponse)

@@ -22,6 +22,6 @@ def test_validate_json_payload_allows_extra_fields():
 
 
 def test_validate_edi_string_detects_missing_segments():
-    errors, warnings = validate_edi_string("PAC+++FCX:67:95'PAC+2+1'")
-    assert "Missing LIN segment" in errors
+    validation = validate_edi_string("PAC+++FCX:67:95'PAC+2+1'")
+    assert "Missing LIN segment" in validation.errors
     # Note: RFF is not required, only LIN and PAC are mandatory

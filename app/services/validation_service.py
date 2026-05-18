@@ -1,7 +1,8 @@
+from app.models.validation_result import ValidationResult
+
 from app.schemas.edi import CargoItemBase
 from app.validators.edi_validator import validate_edi_string
 from app.validators.json_validator import validate_json_payload
-
 
 class ValidationService:
     @staticmethod
@@ -14,6 +15,6 @@ class ValidationService:
         return True, [], warnings, parsed_items
 
     @staticmethod
-    def validate_edi(edi_text: str) -> tuple[bool, list[str], list[str]]:
-        errors, warnings = validate_edi_string(edi_text)
-        return len(errors) == 0, errors, warnings
+    def validate_edi(edi_text: str) -> ValidationResult:
+        validation = validate_edi_string(edi_text)
+        return validation

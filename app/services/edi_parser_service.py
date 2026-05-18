@@ -4,7 +4,6 @@ from pydantic import ValidationError
 from pydifact import Parser
 
 from app.schemas.edi import CargoItemBase, RffType
-from app.validators.edi_validator import validate_edi_string 
 
 class EdiParserService:
     # Map RFF qualifiers to cargo item fields
@@ -50,53 +49,6 @@ class EdiParserService:
         parts.append(''.join(buffer))
         return parts
 
-    class _FallbackSegment:
-        def __init__(self, tag: str, elements: list[Any]):
-            self.tag = tag
-            self.elements = elements
-
-    @staticmethod
-    def _split_edi_segments(edi_text: str) -> list[str]:
-        segments: list[str] = []
-        buffer: list[str] = []
-        index = 0
-        while index < len(edi_text):
-            char = edi_text[index]
-            if char == '?' and index + 1 < len(edi_text):
-                buffer.append(edi_text[index])
-                buffer.append(edi_text[index + 1])
-                index += 2
-                continue
-            if char == "'":
-                if buffer:
-                    segments.append(''.join(buffer))
-                    buffer = []
-                index += 1
-                continue
-            buffer.append(char)
-            index += 1
-        if buffer:
-            segments.append(''.join(buffer))
-        return segments
-
-    @staticmethod
-    def _build_fallback_segment(segment_text: str) -> 'EdiParserService._FallbackSegment':
-        parts = EdiParserService._split_release_aware(segment_text, '+')
-        tag = parts[0] if parts else ''
-        elements: list[Any] = []
-        for part in parts[1:]:
-            composite_parts = EdiParserService._split_release_aware(part, ':')
-            if len(composite_parts) > 1:
-                elements.append([EdiParserService._unescape_text(p) for p in composite_parts])
-            else:
-                elements.append(EdiParserService._unescape_text(part))
-        return EdiParserService._FallbackSegment(tag, elements)
-
-    @staticmethod
-    def _parse_edi_fallback(edi_text: str) -> list['EdiParserService._FallbackSegment']:
-        raw_segments = EdiParserService._split_edi_segments(edi_text)
-        return [EdiParserService._build_fallback_segment(segment) for segment in raw_segments]
-
     @staticmethod
     def _validate_text_value(value: str) -> str:
         """
@@ -126,8 +78,7 @@ class EdiParserService:
             parser = Parser()
             segments = list(parser.parse(edi_text))
         except Exception:
-            # Fallback to a simpler release-aware parser for edge-case RFF payloads
-            segments = EdiParserService._parse_edi_fallback(edi_text)
+            segments = []
 
         cargo_items: list[dict[str, Any]] = []
         current_item: dict[str, Any] | None = None
