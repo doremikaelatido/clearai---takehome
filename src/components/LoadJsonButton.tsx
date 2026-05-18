@@ -1,5 +1,5 @@
 import { Button } from './ui/button';
-import type { CargoItem } from '../types/edi';
+import type { CargoItem } from '@/lib/types';
 import { validateJson as validateJsonService } from '../services/ediService';
 
 interface LoadJsonButtonProps {
