@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        {/*<Route path="/signup" element={<SignupPage />} />*/}
 
         <Route path="/home" element={<DashboardLayout />}>
           <Route index element={<Navigate to="generate-edi" replace />} />

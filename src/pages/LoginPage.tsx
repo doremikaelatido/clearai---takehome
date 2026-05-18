@@ -106,9 +106,11 @@ export default function LoginPage() {
 
             <div className="mt-4 text-center text-sm">
               <span className="text-slate-400">Don't have an account? </span>
+              {/*
               <Link to="/signup" className="font-medium text-sky-400 hover:text-sky-300">
                 Sign Up
               </Link>
+              */}
             </div>
           </CardContent>
         </Card>
