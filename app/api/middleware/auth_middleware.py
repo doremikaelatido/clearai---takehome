@@ -14,7 +14,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if request.url.path in EXEMPT_PATHS or request.url.path.startswith("/docs"):
             return await call_next(request)
 
-        if request.url.path.startswith("/edi"):
+        if request.url.path.startswith("/api/edi"):
             authorization = request.headers.get("Authorization", "")
             match = AUTH_HEADER_PATTERN.match(authorization)
             if not match:
