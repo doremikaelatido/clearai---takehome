@@ -24,16 +24,16 @@ API docs: http://localhost:8000/docs
 - `DATABASE_URL` — default: `sqlite:///./data/dev.db`
 
 ## Endpoints
-- `POST /auth/login` — Body `{ username, password }`, returns JWT
-- `POST /edi/validate-json` — Body `{ items: [...] }` — performs semantic validation
-- `POST /edi/generate` — Body `{ items: [...] }` — returns serialized EDI
-- `POST /edi/validate-edi` — Body `{ edi: '<EDI string>' }` — validates raw EDI
-- `POST /edi/parse` — Body `{ edi: '<EDI string>' }` — parses to JSON
+- `POST /api/auth/login` — Body `{ username, password }`, returns JWT
+- `POST /api/edi/validate-json` — Body `{ items: [...] }` — performs semantic validation
+- `POST /api/edi/generate` — Body `{ items: [...] }` — returns serialized EDI
+- `POST /api/edi/validate-edi` — Body `{ edi: '<EDI string>' }` — validates raw EDI
+- `POST /api/edi/parse` — Body `{ edi: '<EDI string>' }` — parses to JSON
 
 ## Sample curl
 Validate JSON:
 ```bash
-curl -X POST http://localhost:8000/edi/validate-json \
+curl -X POST http://localhost:8000/api/edi/validate-json \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"items":[{"lin":1, "cargoType":"FCX"}]}'
@@ -41,7 +41,7 @@ curl -X POST http://localhost:8000/edi/validate-json \
 
 Generate EDI:
 ```bash
-curl -X POST http://localhost:8000/edi/generate \
+curl -X POST http://localhost:8000/api/edi/generate \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"items":[{"lin":1, "cargoType":"FCX","containerNumber":"MSKU1234567"}]}'
@@ -76,11 +76,11 @@ This FastAPI backend supports user authentication, JSON-to-EDI conversion, EDI-t
 
 - JWT authentication
 - SQLite-based user storage
-- `POST /auth/register` and `POST /auth/login`
-- `POST /edi/json-to-edi`
-- `POST /edi/edi-to-json`
-- `POST /edi/validate-edi`
-- `POST /edi/validate-json`
+- `POST /api/auth/register` and `POST /api/auth/login`
+- `POST /api/edi/json-to-edi`
+- `POST /api/edi/edi-to-json`
+- `POST /api/edi/validate-edi`
+- `POST /api/edi/validate-json`
 - Middleware for JSON body validation and EDI structural validation
 - Service layer separation and reusable validators
 
@@ -120,7 +120,7 @@ pytest app/tests
 Register:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/auth/register \
+curl -X POST http://127.0.0.1:8000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"SecretPass123"}'
 ```
@@ -128,7 +128,7 @@ curl -X POST http://127.0.0.1:8000/auth/register \
 Login:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/auth/login \
+curl -X POST http://127.0.0.1:8000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"SecretPass123"}'
 ```
@@ -136,7 +136,7 @@ curl -X POST http://127.0.0.1:8000/auth/login \
 Convert JSON to EDI:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/edi/json-to-edi \
+curl -X POST http://127.0.0.1:8000/api/edi/json-to-edi \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"cargoItems":[{"cargoType":"FCX","numberOfPackages":10,"containerNumber":"CONT123"}]}'

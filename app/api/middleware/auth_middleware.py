@@ -5,7 +5,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.security import decode_access_token
 
-EXEMPT_PATHS = ["/auth/login", "/auth/register", "/openapi.json", "/docs", "/redoc"]
+EXEMPT_PATHS = ["api/auth/login", "api/auth/register", "/openapi.json", "api/docs", "/redoc"]
 AUTH_HEADER_PATTERN = re.compile(r"^Bearer\s+(.+)$", re.IGNORECASE)
 
 
