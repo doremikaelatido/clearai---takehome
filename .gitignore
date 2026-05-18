@@ -1,0 +1,6 @@
+# Ignore the entire node_modules folder
+node_modules/
+
+# Ignore all __pycache__ folders anywhere in the project
+**/__pycache__/
+*.py[cod]
