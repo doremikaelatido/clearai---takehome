@@ -1,0 +1,73 @@
+deliverable - web application
+- input details to a form
+    - the form should allow multiple cargo items, can be done by having a "+" button that creates a new instance of the form
+    - output is an EDI message - needs to be accepted by Australian Integrated Cargo Report System
+- load and decode existing EDI message and generate JSON output
+
+what data needed for each cargo item:
+- cargo type - enum/select - FCX, LCL, FCL
+- number of packages - number
+- container number - text - alphanum - OPTIONAL
+- master bill of lading number - text - alphanum - OPTIONAL
+- house bill of lading number - text - alphanum - OPTIONAL
+
+some UI notes:
+- "add cargo item" button
+- "new set of fields below existing one" - collapsible
+- "generate EDI" button
+
+how to create the EDI message
+- get data from the form fields
+- send data to fast api backend
+- fastapi backend constructs the EDI string
+
+more about the EDI format
+LIN+{line index}+I'
+PAC+++{cargo type}:67:95'
+PAC+{number of packages}+1'
+PCI+1'
+RFF+AAQ:{container number}'
+PCI+1'
+RFF+MB:{master bill of lading number}'
+PCI+1'
+RFF+BH:{house bill of lading number}'
+- {line index} - index of current cargo item
+- blank OPTIONAL fields - dont include in EDI
+- PCI+1' - beginning of data marker
+    - if blank field, no need PCI+1 marker for it
+- escape the ' in the inputs in the form using ?'
+- input validation - limit to ASCII 32-126 (inclusive)
+
+when generating EDI, concat cargo items to single string to and from BE/FE
+
+decoding EDI message:
+- textarea element where the EDI will be pasted
+- "decode EDI" button - user friendly output
+    - maybe we can do a table of the data
+- new fastapi backend for decoding
+- make sure theres still validation
+    - let users know if there are errors in the string
+
+focus points:
+- UI UX
+    - user login
+    - user registration
+    - forms
+        - left nav bar - Submit Cargo Items, Decode EDI
+        - Generate EDI - side by side - left: cargo items form, right: EDI string
+            - additional features - easy copy/export to file
+        - Decode EDI - side by side - left: textarea, right: cargo items in table
+        - table component for summary of data - use pagination
+            - enable tabular view for all cargo items added
+            - reuse tabular view for decoded EDI messages
+        - nice to have - JSON file import of all cargo items 
+            - instead of manually typing all cargo information
+- UI data validation
+- fastapi auth
+- EDI generation
+- unit tests
+- api docs
+- setup docker for easy testing
+- middleware
+    - logging
+    - authentication and authorization

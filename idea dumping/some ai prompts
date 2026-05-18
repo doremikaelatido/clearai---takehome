@@ -1,0 +1,28 @@
+make me a prompt for copilot to help me write reactjs code for UI. this is what i need
+- boilerplate code for the reactjs - these are the main "pages" we expect the user to interact with 
+    - sign up, 
+    - log in, and a 
+    - home page that has a left nav bar
+        - the nav bar will have "Generate EDI" and "Decode EDI" tabs, as well as "sign out" option.
+- "Generate EDI" is the landing page. It features side to side divs. The left div contains the tabular input forms for the EDI (tabular "summary" view + single EDI input + "add cargo item" button to create new instance of the form). Under all of that, will be a "Generate EDI" button. The right div would then contain a textarea that displays a string, can be easily copied with a button at the top right corner, and then also add an "Export to File" button under the textarea that saves a file to the user's machine
+- The "Generate EDI" forms have the following fields. Make sure that the form is validated, and user will not be allowed to submit if we found invalid inputs.
+    - REQUIRED - "Cargo Type" - dropdown of "FCX", "LCL", "FCL"
+    - REQUIRED - "Number of packages" - number input
+    - OPTIONAL - "Container Number" - text
+    - OPTIONAL - "Master bill of lading number" - text
+    - OPTIONAL - "House bill of lading number" - text
+- The "Decode EDI" will also have side to side divs. The left div will have a "Import EDI file" and below it, one big textarea. If the user decides to import the EDI file, then the contents of the EDI file will display in the textarea. Under the text area, there will be a "Decode EDI" button. The right div will reuse the table component to display all EDI data decoded.
+- More context on the table, it should have an "editingMode" variable, where if it's true, then it should display an extra column "Actions" that has an "edit" and "delete" button. The editingMode state will be true only if user is "Generating EDI". This way, we can reuse the table for "Decode EDI" as well.
+
+make me a prompt for making a fastapi backend service
+- the backend is expected to have the following business endpoints
+    - login a user - a simple database would do, auth will follow as well
+    - register a new user
+    - transform a json string to EDI string
+    - transform an EDI string to a json string,
+    - validate the EDI string if it's a good string
+    - validate the JSON string if it has the expected keys - cargoType, numberOfPackages, containerNumber (optional), masterBlNumber (optional), houseBLNumber (optional). if there are extra data, we should proceed but also let the user know about it. if its lacking data, or we encountered bad data then throw an error
+- it should have a middleware, and the middleware is expected to validate data for the different endpoints. for middleware we need to do the following:
+    - check if JSON string
+    - check if EDI string - maybe we can do a simple regex here to check for important parts of the edi message
+    - check if user has the permissions - just check for the token

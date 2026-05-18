@@ -1,0 +1,19 @@
+- initially looked at the requirements to understand what we want to do, check for ambiguities in the instructions 
+    - created the "requirements simplified" file as I went through the instructions and dumped my initial ideas there
+- used AI to learn more about EDIs to ensure good user experience
+    - i used AI to learn about how big EDI messages can be. I was leaning towards the tabular data representation, because of prior experience with CargoWise, 
+    and it also seems to be the best approach since I learned how big EDI messages can be - tabular format seems like the most user 
+    friendly way to go
+- not familiar with fastapi, used AI to learn more about the key features of fastAPI, what we can do with it specifically in areas like
+    - unit testing
+    - authentication and authorization
+    - scalability and maintainability
+- learning what python packages i can use
+    - EDI - looked at the options, and it seems like the simplest way to go is simple string parsing
+    - authentication
+- had AI make me the boilerplate code for both backend and frontend - i documented the design i had in mind, had AI write me a more detailed prompt to get
+high quality code, and used that prompt with copilot
+- did some fine tuning as I tested the application, took a closer look at the code to check for code we can easily reuse
+    - top consideration was code reusability with minimal hardcoding. we are working with EDIs, and the cargo details form might easily change, so we want to be able to 
+    easily accommodate all those changes with as little code change as possible, so I also provided a prompt to make everything highly configurable and
+    reusable (for example in EDI parsing, instead of hard coding to FCX, LCL, FCL - it can just refer to the cargotype enum values)
