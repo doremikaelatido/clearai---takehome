@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import CargoForm from '@/components/CargoForm';
 import OutputPanel from '@/components/OutputPanel';
@@ -7,6 +6,7 @@ import SummaryTable from '@/components/SummaryTable';
 import { createEmptyCargoItem } from '@/lib/edi';
 import type { CargoItem } from '@/lib/types';
 import { Plus } from 'lucide-react';
+import request from '@/lib/api';
 
 /**
  * Generate EDI Page
@@ -131,7 +131,7 @@ export default function GenerateEdiPage() {
 
             console.log("payload: ", payload);
 
-            const response = await fetch('http://localhost:8000/edi/json-to-edi', {
+            const response = await request('edi/json-to-edi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -140,8 +140,8 @@ export default function GenerateEdiPage() {
                 body: JSON.stringify(payload),
             });
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
+            if (!response) {
+                const errorData = await response?.catch(() => ({}));
                 const detail = errorData.detail;
                 
                 if (detail && typeof detail === 'object') {
@@ -161,8 +161,7 @@ export default function GenerateEdiPage() {
                 }
             }
 
-            const data = await response.json();
-            setEdiOutput(data.edi);
+            setEdiOutput(response?.edi);
         } catch (error) {
             console.error('Error generating EDI:', error);
             setGenerateError(error instanceof Error ? error.message : 'Failed to generate EDI');

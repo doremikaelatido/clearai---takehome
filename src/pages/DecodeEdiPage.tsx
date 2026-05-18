@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 // Textarea replaced by LineNumberedTextarea
-import OutputPanel from '@/components/OutputPanel';
 import SummaryTable from '@/components/SummaryTable';
-import FileUpload from '@/components/FileUpload';
 import type { DecodedEdiItem } from '@/lib/types';
-import { Upload } from 'lucide-react';
 import { LineNumberedTextarea } from '@/components/LineNumberedTextarea';
+import request from '@/lib/api';
 
 /**
  * Decode EDI Page
@@ -63,7 +61,7 @@ export default function DecodeEdiPage() {
                 throw new Error('No authentication token found');
             }
 
-            const response = await fetch('http://localhost:8000/edi/edi-to-json', {
+            const response = await request('edi/edi-to-json', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,8 +70,8 @@ export default function DecodeEdiPage() {
                 body: JSON.stringify({ edi: rawEdiText }),
             });
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
+            if (!response) {
+                const errorData = await response?.catch(() => ({}));
                 const detail = errorData.detail;
                 if (detail && typeof detail === 'object') {
                     const errors = Array.isArray(detail.errors) ? detail.errors : [];
@@ -93,8 +91,7 @@ export default function DecodeEdiPage() {
                 }
             }
 
-            const data = await response.json();
-            setDecodedItems(data.cargoItems || []);
+            setDecodedItems(response.cargoItems || []);
         } catch (error) {
             console.error('Error decoding EDI:', error);
             setDecodedItems([]);

@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FileText } from 'lucide-react';
+import request from '@/lib/api';
 
 /**
  * Login Page
@@ -31,19 +32,17 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/auth/login', {
+      const response = await request('auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Login failed');
+      if (!response) {
+        throw new Error(response?.detail || 'Login failed');
       }
 
-      const data = await response.json();
-      localStorage.setItem('auth', JSON.stringify({ email, token: data.access_token }));
+      localStorage.setItem('auth', JSON.stringify({ email, token: response?.access_token }));
       navigate('/home/generate-edi');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');

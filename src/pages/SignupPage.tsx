@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FileText } from 'lucide-react';
+import request from '@/lib/api';
 
 /**
  * Sign Up Page
@@ -48,19 +49,17 @@ export default function SignupPage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/auth/register', {
+      const response = await request('auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Registration failed');
+      if (!response) {
+        throw new Error(response?.detail || 'Registration failed');
       }
 
-      const data = await response.json();
-      localStorage.setItem('auth', JSON.stringify({ email: formData.email, token: data.access_token }));
+      localStorage.setItem('auth', JSON.stringify({ email: formData.email, token: response?.access_token }));
       navigate('/home/generate-edi');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
