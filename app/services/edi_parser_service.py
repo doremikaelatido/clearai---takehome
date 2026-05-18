@@ -121,8 +121,6 @@ class EdiParserService:
         Extracts cargo items from EDI segments (LIN, PAC, RFF).
         Only returns items that pass Pydantic validation.
         """
-        # TODO FAILING FOR RFF+AAQ:~`asdokapo??'asd???''
-        print("parsing edi: ", edi_text)
         try:
             # Parse EDI message using pydifact
             parser = Parser()
@@ -136,7 +134,7 @@ class EdiParserService:
 
         # Iterate through parsed segments
         for segment in segments:
-            tag = segment.tag
+            tag = segment.tag.strip()
 
             if tag == "LIN":
                 # Start a new cargo item

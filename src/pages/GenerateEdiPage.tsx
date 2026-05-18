@@ -129,9 +129,7 @@ export default function GenerateEdiPage() {
                 })),
             };
 
-            console.log("payload: ", payload);
-
-            const response = await request('edi/json-to-edi', {
+            const data = await request('edi/json-to-edi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -140,13 +138,12 @@ export default function GenerateEdiPage() {
                 body: JSON.stringify(payload),
             });
 
-            if (!response) {
-                const detail = response?.detail || {};
-                
+            if (!data.edi) {
+                const detail = data.detail || {};
                 if (detail && typeof detail === 'object') {
                     const errors = Array.isArray(detail.errors) ? detail.errors : [];
                     const warnings = Array.isArray(detail.warnings) ? detail.warnings : [];
-                    
+
                     if (errors.length > 0) {
                         setGenerateError(errors.join('; '));
                         setGenerateWarnings(warnings);
@@ -159,8 +156,7 @@ export default function GenerateEdiPage() {
                     throw new Error(detail || 'Failed to generate EDI');
                 }
             }
-
-            setEdiOutput(response?.edi);
+            setEdiOutput(data.edi);
         } catch (error) {
             console.error('Error generating EDI:', error);
             setGenerateError(error instanceof Error ? error.message : 'Failed to generate EDI');

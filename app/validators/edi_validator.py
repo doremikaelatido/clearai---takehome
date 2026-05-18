@@ -50,11 +50,10 @@ def validate_edi_string(edi_text: str) -> tuple[list[str], list[str]]:
             if segment.startswith("RFF+"):
                 if not RFF_REGEX.match(segment):
                     errors.append(f"Invalid RFF segment: {segment} @ line:{line+1}")
+        elif segment.startswith("RFF+"):
+            errors.append(f"Invalid RFF segment block - not preceded by PCI+1")
         else:
-            if segment.startswith("RFF+"):
-                errors.append(f"Invalid RFF segment block - not preceded by PCI+1")
-            else:
-                warnings.append(f"Unexpected line @ {line+1}")
+            warnings.append(f"Unexpected line @ {line+1}")
         last_segment_pci = segment == "PCI+1"
 
     return errors, warnings

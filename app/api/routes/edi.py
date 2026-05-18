@@ -40,7 +40,7 @@ def edi_to_json(request: EdiToJsonRequest):
             detail="Unable to parse any valid cargo items from EDI payload",
         )
 
-    return EdiParseResponse(cargoItems=parsed_items)
+    return EdiParseResponse(cargoItems=parsed_items, detail={"warnings": warnings})
 
 
 @router.post("/validate-edi", response_model=ValidationResponse)

@@ -49,20 +49,16 @@ export default function SignupPage() {
 
     setIsLoading(true);
     try {
-      const response = await request('auth/register', {
+      const data = await request('auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
 
-      if (!response) {
-        throw new Error(response?.detail || 'Registration failed');
-      }
-
-      localStorage.setItem('auth', JSON.stringify({ email: formData.email, token: response?.access_token }));
+      localStorage.setItem('auth', JSON.stringify({ email: formData.email, token: data?.access_token }));
       navigate('/home/generate-edi');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+    } catch (error: any) {
+      setError(error instanceof Error ? error.message : 'Registration failed');
     } finally {
       setIsLoading(false);
     }

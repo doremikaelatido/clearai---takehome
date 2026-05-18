@@ -61,7 +61,7 @@ export default function DecodeEdiPage() {
                 throw new Error('No authentication token found');
             }
 
-            const response = await request('edi/edi-to-json', {
+            const data = await request('edi/edi-to-json', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,27 +70,30 @@ export default function DecodeEdiPage() {
                 body: JSON.stringify({ edi: rawEdiText }),
             });
 
-            if (!response) {
-                const detail = response?.detail || {};
-                if (detail && typeof detail === 'object') {
-                    const errors = Array.isArray(detail.errors) ? detail.errors : [];
-                    const warnings = Array.isArray(detail.warnings) ? detail.warnings : [];
-                    
-                    if (errors.length > 0) {
-                        setDecodeError(errors.join('; '));
-                        setDecodeWarnings(warnings);
-                        setDecodedItems([]);
-                        setIsDecoding(false);
-                        return;
-                    }
-                    // If only warnings, proceed with parsing
-                    setDecodeWarnings(warnings);
-                } else {
-                    throw new Error(detail || 'Failed to decode EDI');
-                }
-            }
+            if (data.detail) {
+                const detail = data.detail || {};
+                const warnings = Array.isArray(detail.warnings) ? detail.warnings : [];
 
-            setDecodedItems(response.cargoItems || []);
+                if (!data.cargoItems) {
+                    if (detail && typeof detail === 'object') {
+                        const errors = Array.isArray(detail.errors) ? detail.errors : [];
+                        const warnings = Array.isArray(detail.warnings) ? detail.warnings : [];
+
+                        if (errors.length > 0) {
+                            setDecodeError(errors.join('; '));
+                            setDecodeWarnings(warnings);
+                            setDecodedItems([]);
+                            setIsDecoding(false);
+                            return;
+                        }
+                    } else {
+                        throw new Error(detail || 'Failed to decode EDI');
+                    }
+                }
+                // If only warnings, proceed with parsing
+                setDecodeWarnings(warnings);
+            }
+            setDecodedItems(data.cargoItems || []);
         } catch (error) {
             console.error('Error decoding EDI:', error);
             setDecodedItems([]);

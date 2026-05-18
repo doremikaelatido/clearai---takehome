@@ -69,6 +69,9 @@ class ValidationResponse(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+class EdiDetail(BaseModel):
+    warnings: list[str]
 
 class EdiParseResponse(BaseModel):
     cargoItems: list[CargoItemBase]
+    detail: EdiDetail

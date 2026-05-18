@@ -31,7 +31,7 @@ async function safeParseJson(text: string) {
   }
 }
 
-export async function request<T = unknown>(path: string, opts: ApiOptions = {}): Promise<T> {
+export async function request<T = Record<string, any>>(path: string, opts: ApiOptions = {}): Promise<T> {
   const base = getBaseUrl() || 'http://localhost:8000';
   const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '' : '/'}${path}`;
 
@@ -65,7 +65,7 @@ export async function request<T = unknown>(path: string, opts: ApiOptions = {}):
       const detail = (body as any).detail ?? (body as any).errors ?? undefined;
       if (Array.isArray(detail)) messages = detail.map(String);
       else if (typeof detail === 'string') messages = [detail];
-      else messages = undefined;
+      else messages = detail.errors;
     }
 
     throw new ApiError(

@@ -32,20 +32,16 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      const response = await request('auth/login', {
+      const data = await request('auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-
-      if (!response) {
-        throw new Error(response?.detail || 'Login failed');
-      }
-
-      localStorage.setItem('auth', JSON.stringify({ email, token: response?.access_token }));
+      
+      localStorage.setItem('auth', JSON.stringify({ email, token: data?.access_token }));
       navigate('/home/generate-edi');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+    } catch (error: any) {
+      setError(error instanceof Error ? error.message : 'Login failed');
     } finally {
       setIsLoading(false);
     }
