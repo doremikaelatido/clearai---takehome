@@ -3,14 +3,14 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "ClearAI EDI Service"
-    DATABASE_URL: str = "sqlite:///./app.db"
-    JWT_SECRET_KEY: str = "change-this-secret-in-production"
-    JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    PROJECT_NAME: str
+    DATABASE_URL: str
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
     SMTP_ENABLED: bool = False
 
-    model_config = ConfigDict(env_file=".env", env_file_encoding="utf-8")
-
+    class Config:
+        env_file = ".env"
 
 settings = Settings()
