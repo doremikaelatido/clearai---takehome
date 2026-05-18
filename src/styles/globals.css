@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-slate-500 antialiased;
+}
+
+input,
+textarea,
+button,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(171, 195, 220, 0.81);
+}
+
+@layer utilities {
+  .page-padding {
+    @apply px-[clamp(1rem,2vw,2.5rem)]
+           py-[clamp(1rem,1.5vh,2rem)];
+  }
+
+  .section-gap {
+    @apply gap-[clamp(1rem,1.5vw,2rem)];
+  }
+
+  .stack-gap {
+    @apply space-y-[clamp(1rem,1.5vw,2rem)];
+  }
+
+  .card-padding {
+    @apply p-[clamp(2.5rem,1.2vw,2.5rem)];
+  }
+}
