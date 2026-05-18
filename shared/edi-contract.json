@@ -1,0 +1,67 @@
+{
+  "cargoTypes": ["FCX", "LCL", "FCL"],
+  "rffTypes": [
+    {
+      "key": "AAQ",
+      "label": "Container Number",
+      "valueType": "text"
+    },
+    {
+      "key": "MB",
+      "label": "Master BL Number",
+      "valueType": "text"
+    },
+    {
+      "key": "BH",
+      "label": "House BL Number",
+      "valueType": "text"
+    }
+  ],
+  "cargoItemFields": [
+    "cargoType",
+    "numberOfPackages",
+    "containerNumber",
+    "masterBlNumber",
+    "houseBlNumber"
+  ],
+  "tableColumns": [
+    {
+      "key": "cargoType",
+      "label": "Cargo Type",
+      "sortable": true
+    },
+    {
+      "key": "numberOfPackages",
+      "label": "Number of Packages",
+      "sortable": true
+    },
+    {
+      "key": "containerNumber",
+      "label": "Container Number",
+      "sortable": true
+    },
+    {
+      "key": "masterBlNumber",
+      "label": "Master BL Number",
+      "sortable": true
+    },
+    {
+      "key": "houseBlNumber",
+      "label": "House BL Number",
+      "sortable": true
+    }
+  ],
+  "valueTypeRules": {
+    "text": {
+      "description": "Text value with printable ASCII restriction",
+      "allowedChars": "ASCII 32-126 except [ (91) and ] (93)",
+      "escapeSequence": "?' unescapes to '"
+    },
+    "alphanumeric": {
+      "description": "Letters and numbers only"
+    },
+    "number": {
+      "description": "Numeric values only"
+    }
+  }
+}
