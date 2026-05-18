@@ -6,7 +6,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 class EdiValidationMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if request.method == "POST" and request.url.path in {"/api/edi/edi-to-json", "/api/edi/validate-edi"}:
+        if request.method == "POST" and request.url.path in {"/edi/edi-to-json", "/edi/validate-edi"}:
             body_bytes = await request.body()
             if not body_bytes:
                 raise HTTPException(

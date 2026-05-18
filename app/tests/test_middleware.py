@@ -5,7 +5,7 @@ def test_json_validation_middleware_rejects_text_plain(client):
 
 def test_edi_validation_middleware_rejects_invalid_payload(client):
     auth_response = client.post(
-        "api/auth/register",
+        "auth/register",
         json={"email": "middleware@example.com", "password": "Pass1234"},
     )
     token = auth_response.json()["access_token"]
@@ -14,5 +14,5 @@ def test_edi_validation_middleware_rejects_invalid_payload(client):
         "Content-Type": "application/json",
     }
 
-    response = client.post("/api/edi/validate-edi", json={"edi": "BAD CONTENT"}, headers=headers)
+    response = client.post("/edi/validate-edi", json={"edi": "BAD CONTENT"}, headers=headers)
     assert response.status_code == 422

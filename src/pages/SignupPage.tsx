@@ -49,7 +49,7 @@ export default function SignupPage() {
 
     setIsLoading(true);
     try {
-      const data = await request('auth/register', {
+      const data = await request('/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, password: formData.password }),

@@ -19,7 +19,7 @@ class EdiParserService:
         result: list[str] = []
         index = 0
         while index < len(value):
-            if value[index] == '?' and index + 1 < len(value):
+            if value[index] == '?' and index + 1 < len(value) and value[index+1] == "'":
                 result.append(value[index + 1])
                 index += 2
                 continue
@@ -34,7 +34,7 @@ class EdiParserService:
         index = 0
         while index < len(value):
             char = value[index]
-            if char == '?' and index + 1 < len(value):
+            if char == '?' and index + 1 < len(value) and value[index+1] == "'":
                 buffer.append(value[index])
                 buffer.append(value[index + 1])
                 index += 2

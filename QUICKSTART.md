@@ -187,9 +187,9 @@ VITE_API_KEY=your_api_key
 2. **Create API service in `src/lib/api.ts`:**
 ```typescript
 export const api = {
-  login: (email, password) => fetch('/api/auth/login', ...),
-  generateEdi: (items) => fetch('/api/edi/generate', ...),
-  decodeEdi: (text) => fetch('/api/edi/decode', ...),
+  login: (email, password) => fetch('/auth/login', ...),
+  generateEdi: (items) => fetch('/edi/generate', ...),
+  decodeEdi: (text) => fetch('/edi/decode', ...),
 };
 ```
 

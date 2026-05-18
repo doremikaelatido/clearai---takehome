@@ -19,7 +19,7 @@ def client():
 def test_login_and_access(client):
     # Arrange - register a user
     register_resp = client.post(
-        "/api/auth/register",
+        "/auth/register",
         json={"email": "test@example.com", "password": "testpass123"}
     )
     assert register_resp.status_code == 200
@@ -27,7 +27,7 @@ def test_login_and_access(client):
     
     # Act - login with same credentials
     login_resp = client.post(
-        "/api/auth/login",
+        "/auth/login",
         json={"email": "test@example.com", "password": "testpass123"}
     )
     

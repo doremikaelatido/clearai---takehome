@@ -27,13 +27,13 @@ async function safeParseJson(text: string) {
   try {
     return JSON.parse(text);
   } catch {
-    return undefined;
+    return undefined; 
   }
 }
 
 export async function request<T = Record<string, any>>(path: string, opts: ApiOptions = {}): Promise<T> {
   const base = getBaseUrl() || 'http://localhost:8000';
-  const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '' : '/'}${path}`;
+  const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '/api' : '/api/'}${path}`;
 
   const headers = new Headers((opts.headers as HeadersInit) || {});
 

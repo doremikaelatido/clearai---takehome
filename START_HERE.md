@@ -268,8 +268,8 @@ SignupPage.tsx → API /auth/signup
 
 ### 2. Replace EDI Logic
 ```
-generateEdiString() → API /api/edi/generate
-decodeEdiMock() → API /api/edi/decode
+generateEdiString() → API /edi/generate
+decodeEdiMock() → API /edi/decode
 ```
 
 ### 3. Add Data Persistence
