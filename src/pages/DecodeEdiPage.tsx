@@ -71,8 +71,7 @@ export default function DecodeEdiPage() {
             });
 
             if (!response) {
-                const errorData = await response?.catch(() => ({}));
-                const detail = errorData.detail;
+                const detail = response?.detail || {};
                 if (detail && typeof detail === 'object') {
                     const errors = Array.isArray(detail.errors) ? detail.errors : [];
                     const warnings = Array.isArray(detail.warnings) ? detail.warnings : [];
