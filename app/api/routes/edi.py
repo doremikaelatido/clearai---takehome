@@ -8,7 +8,7 @@ from app.services.edi_generator_service import EdiGeneratorService
 from app.services.edi_parser_service import EdiParserService
 from app.services.validation_service import ValidationService
 
-router = APIRouter(prefix="/api/edi", tags=["edi"], dependencies=[Depends(get_current_user)])
+router = APIRouter(prefix="/edi", tags=["edi"], dependencies=[Depends(get_current_user)])
 
 
 @router.post("/json-to-edi")
