@@ -230,7 +230,7 @@ export default function GenerateEdiPage() {
                             <Button
                                 onClick={handleGenerateEdi}
                                 variant="primary"
-                                disabled={!isFormValid || isGenerating}
+                                disabled={!isFormValid || cargoItems.length == 0 || isGenerating}
                             >
                                 {isGenerating ? 'Generating...' : 'Generate EDI'}
                             </Button>
