@@ -5,7 +5,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.security import decode_access_token
 
-EXEMPT_PATHS = ["auth/login", "auth/register", "/openapi.json", "api/docs", "/redoc"]
+EXEMPT_PATHS = ["api/authlogin", "api/authregister", "/openapi.json", "api/docs", "/redoc"]
 AUTH_HEADER_PATTERN = re.compile(r"^Bearer\s+(.+)$", re.IGNORECASE)
 
 
@@ -14,7 +14,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if request.url.path in EXEMPT_PATHS or request.url.path.startswith("/docs"):
             return await call_next(request)
 
-        if request.url.path.startswith("/edi"):
+        if request.url.path.startswith("/api/edi"):
             authorization = request.headers.get("Authorization", "")
             match = AUTH_HEADER_PATTERN.match(authorization)
             if not match:

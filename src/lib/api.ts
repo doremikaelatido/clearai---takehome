@@ -32,8 +32,8 @@ async function safeParseJson(text: string) {
 }
 
 export async function request<T = Record<string, any>>(path: string, opts: ApiOptions = {}): Promise<T> {
-  const base = getBaseUrl() || 'http://localhost:8000';
-  const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '/api' : '/api/'}${path}`;
+  const base = getBaseUrl() || 'http://localhost:8000/api';
+  const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '' : '/'}${path}`;
 
   const headers = new Headers((opts.headers as HeadersInit) || {});
 

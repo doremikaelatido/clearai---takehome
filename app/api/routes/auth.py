@@ -5,7 +5,7 @@ from app.api.dependencies.database import get_db
 from app.schemas.auth import Token, UserCreate
 from app.services.auth_service import AuthService
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 
 # @router.post("/register", response_model=Token)
