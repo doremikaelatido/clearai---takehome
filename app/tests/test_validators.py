@@ -14,11 +14,11 @@ def test_validate_json_payload_allows_extra_fields():
         ]
     }
 
-    valid, errors, warnings, items = validate_json_payload(payload)
-    assert valid
-    assert not errors
-    assert "Unexpected field: extraField" in warnings
-    assert items[0]["cargoType"] == "FCL"
+    validation = validate_json_payload(payload)
+    assert validation.valid
+    assert not validation.errors
+    assert "Unexpected field: extraField" in validation.warnings
+    assert validation.items[0]["cargoType"] == "FCL"
 
 
 def test_validate_edi_string_detects_missing_segments():

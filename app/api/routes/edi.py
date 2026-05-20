@@ -13,14 +13,14 @@ router = APIRouter(prefix="/api/edi", tags=["edi"], dependencies=[Depends(get_cu
 
 @router.post("/json-to-edi")
 def json_to_edi(request: JsonToEdiRequest, db: Session = Depends(get_db)):
-    valid, errors, warnings, items = ValidationService.validate_json(request.model_dump())
-    if not valid:
+    validation = ValidationService.validate_json(request.model_dump())
+    if not validation.valid:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"errors": errors, "warnings": warnings},
+            detail={"errors": validation.errors, "warnings": validation.warnings},
         )
 
-    edi_result = EdiGeneratorService.generate_edi(items)
+    edi_result = EdiGeneratorService.generate_edi(validation.items)
     return {"edi": edi_result}
 
 
@@ -52,4 +52,4 @@ def validate_edi(request: EdiToJsonRequest):
 @router.post("/validate-json", response_model=ValidationResponse)
 def validate_json(request: JsonToEdiRequest):
     validation = ValidationService.validate_json(request.model_dump())
-    return ValidationResponse(valid=validation.valid, errors=validation.errors, warnings=validation.warnings)
+    return validation
