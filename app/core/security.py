@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+from fastapi import HTTPException
 import jwt
 from passlib.context import CryptContext
 
@@ -32,6 +33,6 @@ def decode_access_token(token: str) -> dict[str, Any]:
         payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError as exc:
-        raise ValueError("Token has expired") from exc
+        raise HTTPException(status_code=401, detail={"errors": ["Token has expired"]}) from exc
     except jwt.PyJWTError as exc:
-        raise ValueError("Token is invalid") from exc
+        raise HTTPException(status_code=401, detail={"errors": ["Invalid token"]}) from exc

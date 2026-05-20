@@ -1,8 +1,11 @@
+import re
 from typing import Any
 
+from fastapi import HTTPException
 from pydantic import ValidationError
 from pydifact import Parser
 
+from app.edi.parser import parse_edi_segments
 from app.schemas.edi import CargoItemBase, RffType
 
 class EdiParserService:
@@ -53,16 +56,13 @@ class EdiParserService:
     def _validate_text_value(value: str) -> str:
         """
         Validate that text value contains only allowed ASCII characters (32-126, except [ and ]).
-        Raises ValueError if validation fails.
+        Raises error if validation fails.
         """
         # ASCII 32-126 is printable ASCII, excluding 91 ([) and 93 (])
         for char in value:
             char_code = ord(char)
             if not (32 <= char_code <= 126) or char_code in (91, 93):
-                raise ValueError(
-                    f"Invalid character in RFF value: '{char}' (ASCII {char_code}). "
-                    f"Allowed: ASCII 32-126 except [ (91) and ] (93)."
-                )
+                raise HTTPException(status_code=400, detail={"errors": [f"Invalid character in RFF value: '{char}' (ASCII {char_code}). Allowed: ASCII 32-126 except [ (91) and ] (93)."]})
         return value
 
     @staticmethod
@@ -75,8 +75,9 @@ class EdiParserService:
         """
         try:
             # Parse EDI message using pydifact
-            parser = Parser()
-            segments = list(parser.parse(edi_text))
+            # parser = Parser()
+            # segments = list(parser.parse(edi_text))
+            segments = parse_edi_segments(edi_text)
         except Exception:
             segments = []
 
@@ -148,16 +149,8 @@ class EdiParserService:
                 elements = segment.elements
                 
                 if isinstance(elements, list):
-                    for element in elements:
                         # element may be a list like ['AAQ','CNT123'] or a string 'AAQ:CNT123'
-                        if isinstance(element, list) and len(element) >= 2:
-                            qualifier, value = element[0], element[1]
-                        else:
-                            element_str = str(element)
-                            if ":" in element_str:
-                                qualifier, value = element_str.split(":", 1)
-                            else:
-                                continue
+                        qualifier, value = elements[0], elements[1]
 
                         # Map qualifier to field name
                         field_name = EdiParserService.RFF_QUALIFIER_MAP.get(qualifier)

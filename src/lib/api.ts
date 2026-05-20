@@ -32,6 +32,10 @@ async function safeParseJson(text: string) {
 }
 
 export async function request<T = Record<string, any>>(path: string, opts: ApiOptions = {}): Promise<T> {
+  opts.headers = {
+    'Content-Type': 'application/json',
+  };
+
   const base = getBaseUrl() || 'http://localhost:8000/api';
   const url = path.startsWith('http') ? path : `${base}${path.startsWith('/') ? '' : '/'}${path}`;
 
@@ -46,7 +50,8 @@ export async function request<T = Record<string, any>>(path: string, opts: ApiOp
   // inject auth
   try {
     if (!opts.skipAuth) {
-      const token = getToken();
+      const token = localStorage.getItem('auth')
+        ? JSON.parse(localStorage.getItem('auth') || '{}').token : getToken() || null;
       if (token) headers.set('Authorization', `Bearer ${token}`);
     }
   } catch {

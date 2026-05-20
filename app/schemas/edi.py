@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Any
 
+from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 
@@ -34,10 +35,8 @@ class CargoItemBase(BaseModel):
         for char in value:
             char_code = ord(char)
             if not (32 <= char_code <= 126) or char_code in (91, 93):
-                raise ValueError(
-                    f"Invalid character '{char}' (ASCII {char_code}). "
-                    f"Allowed: ASCII 32-126 except [ (91) and ] (93)."
-                )
+                raise HTTPException(status_code=400, detail={"errors": [f"Invalid character '{char}' (ASCII {char_code}). Allowed: ASCII 32-126 except [ (91) and ] (93)."]})
+
         return value
 
     @field_validator("containerNumber", "masterBlNumber", "houseBlNumber", mode="before")

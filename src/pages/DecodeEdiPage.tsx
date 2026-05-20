@@ -54,19 +54,8 @@ export default function DecodeEdiPage() {
         setDecodeWarnings([]);
 
         try {
-            const auth = localStorage.getItem('auth');
-            const token = auth ? JSON.parse(auth).token : null;
-
-            if (!token) {
-                throw new Error('No authentication token found');
-            }
-
             const data = await request('/edi/edi-to-json', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
                 body: JSON.stringify({ edi: rawEdiText }),
             });
 

@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+
 from app.schemas.edi import CargoItemBase, RffType
 
 
@@ -10,7 +12,7 @@ class EdiGeneratorService:
     
         # Validate cargo items before processing
         if not cargo_items or not all(isinstance(item, CargoItemBase) for item in cargo_items):
-            raise ValueError("Invalid cargo items: must provide non-empty list of CargoItemBase objects")
+            raise HTTPException(status_code=400, detail={"errors": ["Invalid cargo items: must provide non-empty list of CargoItemBase objects"]})
 
         segments: list[str] = []
 

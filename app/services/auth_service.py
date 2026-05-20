@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.security import create_access_token, hash_password, verify_password
@@ -15,7 +16,7 @@ class AuthService:
     def register(db: Session, email: str, password: str) -> User:
         existing = UserRepository.get_by_email(db, email)
         if existing:
-            raise ValueError("A user with that email already exists")
+            raise HTTPException(status_code=400, detail={"errors": ["A user with that email already exists"]})
 
         truncated_password = AuthService._truncate_password(password)
         hashed_password = hash_password(truncated_password)

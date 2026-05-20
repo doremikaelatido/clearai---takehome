@@ -1,6 +1,7 @@
 import json
 
-from fastapi import HTTPException, Request, status
+from fastapi import Request, status
+from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
@@ -9,30 +10,46 @@ class EdiValidationMiddleware(BaseHTTPMiddleware):
         if request.method == "POST" and request.url.path in {"/api/edi/edi-to-json", "/api/edi/validate-edi"}:
             body_bytes = await request.body()
             if not body_bytes:
-                raise HTTPException(
+                return JSONResponse(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Request body cannot be empty",
+                    content={
+                        "errors": [
+                            "Request body cannot be empty"
+                        ]
+                    },
                 )
 
             try:
                 payload = json.loads(body_bytes)
             except json.JSONDecodeError:
-                raise HTTPException(
+                return JSONResponse(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Malformed JSON body",
+                    content={
+                        "errors": [
+                            "Malformed JSON body"
+                        ]
+                    },
                 )
 
             edi_text = payload.get("edi")
             if not isinstance(edi_text, str) or not edi_text.strip():
-                raise HTTPException(
+                return JSONResponse(
                     status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="EDI payload must include a non-empty 'edi' field",
+                    content={
+                        "errors": [
+                            "EDI payload must include a non-empty 'edi' field"
+                        ]
+                    },
                 )
 
             if "LIN+" not in edi_text or "PAC" not in edi_text:
-                raise HTTPException(
+                return JSONResponse(
                     status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="EDI payload does not resemble a valid EDI document",
+                    content={
+                        "errors": [
+                            "EDI payload does not resemble a valid EDI document"
+                        ]
+                    },
                 )
 
         return await call_next(request)

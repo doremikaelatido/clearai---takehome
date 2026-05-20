@@ -45,11 +45,11 @@ def edi_to_json(request: EdiToJsonRequest):
 
 @router.post("/validate-edi", response_model=ValidationResponse)
 def validate_edi(request: EdiToJsonRequest):
-    valid, errors, warnings = ValidationService.validate_edi(request.edi)
-    return ValidationResponse(valid=valid, errors=errors, warnings=warnings)
+    validation = ValidationService.validate_edi(request.edi)
+    return ValidationResponse(valid=validation.valid, errors=validation.errors, warnings=validation.warnings)
 
 
 @router.post("/validate-json", response_model=ValidationResponse)
 def validate_json(request: JsonToEdiRequest):
-    valid, errors, warnings, _ = ValidationService.validate_json(request.model_dump())
-    return ValidationResponse(valid=valid, errors=errors, warnings=warnings)
+    validation = ValidationService.validate_json(request.model_dump())
+    return ValidationResponse(valid=validation.valid, errors=validation.errors, warnings=validation.warnings)

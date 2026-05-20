@@ -114,14 +114,6 @@ export default function GenerateEdiPage() {
         setGenerateError('');
         setGenerateWarnings([]);
         try {
-            const token = localStorage.getItem('auth')
-                ? JSON.parse(localStorage.getItem('auth') || '{}').token
-                : null;
-
-            if (!token) {
-                throw new Error('No authentication token found');
-            }
-
             const payload = {
                 cargoItems: cargoItems.map((item) => ({
                     ...item,
@@ -131,10 +123,6 @@ export default function GenerateEdiPage() {
 
             const data = await request('/edi/json-to-edi', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
                 body: JSON.stringify(payload),
             });
 

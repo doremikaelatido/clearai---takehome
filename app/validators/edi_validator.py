@@ -73,7 +73,7 @@ def validate_edi_string(edi_text: str) -> ValidationResult:
 
     raw_segments = [
         segment
-        for segment in edi_text.split("'")
+        for segment in re.split(r"(?<!\?)'", edi_text)
         if segment.strip()
     ]
 
@@ -222,4 +222,5 @@ def validate_edi_string(edi_text: str) -> ValidationResult:
         for _, segment in recovered_segments
     ]
     result.cleaned_edi = "'".join(cleaned_segments) + "'"
+    result.valid = not result.errors
     return result
