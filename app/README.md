@@ -33,7 +33,7 @@ API docs: http://localhost:8000/docs
 ## Sample curl
 Validate JSON:
 ```bash
-curl -X POST http://localhost:8000/edi/validate-json \
+curl -X POST http://localhost:8000/api/edi/validate-json \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"items":[{"lin":1, "cargoType":"FCX"}]}'
@@ -41,7 +41,7 @@ curl -X POST http://localhost:8000/edi/validate-json \
 
 Generate EDI:
 ```bash
-curl -X POST http://localhost:8000/edi/generate \
+curl -X POST http://localhost:8000/api/edi/generate \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"items":[{"lin":1, "cargoType":"FCX","containerNumber":"MSKU1234567"}]}'
@@ -120,7 +120,7 @@ pytest app/tests
 Register:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/auth/register \
+curl -X POST http://127.0.0.1:8000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"SecretPass123"}'
 ```
@@ -128,7 +128,7 @@ curl -X POST http://127.0.0.1:8000/auth/register \
 Login:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/auth/login \
+curl -X POST http://127.0.0.1:8000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"SecretPass123"}'
 ```
@@ -136,7 +136,7 @@ curl -X POST http://127.0.0.1:8000/auth/login \
 Convert JSON to EDI:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/edi/json-to-edi \
+curl -X POST http://127.0.0.1:8000/api/edi/json-to-edi \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"cargoItems":[{"cargoType":"FCX","numberOfPackages":10,"containerNumber":"CONT123"}]}'
