@@ -2,6 +2,10 @@
 
 This document describes the frontend application used to edit, validate, and generate EDI.
 
+# Sample credentials for testing locally:
+email: mika@yahoo.com
+password: mika241
+
 ## Installation
 Prerequisites: Node 18+ and npm
 
