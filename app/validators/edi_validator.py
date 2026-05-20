@@ -222,5 +222,6 @@ def validate_edi_string(edi_text: str) -> ValidationResult:
         for _, segment in recovered_segments
     ]
     result.cleaned_edi = "'".join(cleaned_segments) + "'"
+    print("Cleaned EDI:", result.cleaned_edi)  # Debug log
     result.valid = not result.errors
     return result

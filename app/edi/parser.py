@@ -22,15 +22,13 @@ def parse_edi_segments(edi_text: str) -> list[EdiSegment]:
         # Real segment terminator
         if char == "'" and not escape_next:
             segment = "".join(current).strip()
-
             if segment:
                 raw_segments.append(segment)
-
             current = []
             continue
 
         # Previous char was release character
-        if escape_next and char == "'":
+        if escape_next:
             current.append(char)
             escape_next = False
             continue
@@ -64,6 +62,7 @@ def parse_edi_segments(edi_text: str) -> list[EdiSegment]:
             rff_parts = raw_segment.split("+", 1)
             # Special handling for RFF segments to split by ':' while respecting release characters
             qualifier, value = rff_parts[1].split(":", 1)
+            print(f"Parsing RFF segment: qualifier='{qualifier}', value='{value}'")  # Debug log
             elements.append(qualifier)
             elements.append(value)
         else:
